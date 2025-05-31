@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\NotesController;
 Route::post('/register',[UsearAuthController::class,'register']);
 Route::post('/login',[UsearAuthController::class,'login']);
 Route::post('/logout',[UsearAuthController::class,'logout'])->middleware('auth:sanctum');
+Route::get('/profile',[UsearAuthController::class,'profile'])->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/list-notes', [NotesController::class, 'index']);
@@ -18,6 +19,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/list-notes/{id}', [NotesController::class, 'show']);
     Route::post('/edit-notes/{id}', [NotesController::class, 'update']);
     Route::delete('/list-notes/{id}', [NotesController::class, 'destroy']);
+
+    Route::get('/notes-trash', [NotesController::class, 'trash']);
+    Route::post('/notes-restore/{id}', [NotesController::class, 'restore']);
+
+
 });
 
 
