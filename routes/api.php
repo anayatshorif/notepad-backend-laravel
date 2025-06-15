@@ -12,6 +12,8 @@ Route::post('/register',[UsearAuthController::class,'register']);
 Route::post('/login',[UsearAuthController::class,'login']);
 Route::post('/logout',[UsearAuthController::class,'logout'])->middleware('auth:sanctum');
 Route::get('/profile',[UsearAuthController::class,'profile'])->middleware('auth:sanctum');
+Route::post('/upload-profile-picture',[UsearAuthController::class,'uploadProfilePicture'])->middleware('auth:sanctum');
+
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/list-notes', [NotesController::class, 'index']);

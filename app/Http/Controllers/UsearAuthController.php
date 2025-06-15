@@ -89,9 +89,35 @@ class UsearAuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'profile_picture_url' => $user->profile_picture ? asset('storage/' . $user->profile_picture) : null,
                 'created_at' => $user->created_at->toDateString()
             ]
         ]);
     }
+    public function uploadProfilePicture(Request $request)
+    {
+        $request->validate([
+            'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $user = $request->user();
+
+        if ($request->hasFile('profile_picture')) {
+            $file = $request->file('profile_picture');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('profile_pictures', $filename, 'public');
+
+            $user->profile_picture = $path;
+            $user->save();
+
+            return response()->json([
+                'message' => 'Profile picture uploaded successfully.',
+                'profile_picture_url' => asset('storage/' . $path)
+            ]);
+        }
+
+        return response()->json(['error' => 'No file uploaded.'], 400);
+    }
+
 
 }
